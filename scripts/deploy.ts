@@ -9,14 +9,14 @@ async function main(): Promise<void> {
   // Hardhat always runs the compile task when running scripts through it.
   // If this runs in a standalone fashion you may want to call compile manually
   // to make sure everything is compiled
-  // await run("compile");
+  // await run("compile");npx hardhat run scripts/deploy.js --network ropsten
 
   // We get the contract to deploy
-  const Greeter: ContractFactory = await ethers.getContractFactory("Greeter");
-  const greeter: Contract = await Greeter.deploy("Hello, Buidler!");
-  await greeter.deployed();
+  const EmployeeRating: ContractFactory = await ethers.getContractFactory("EmployeeRating");
+  const employeeRating: Contract = await EmployeeRating.deploy();
+  await employeeRating.deployed();
 
-  console.log("Greeter deployed to: ", greeter.address);
+  console.log("Greeter deployed to: ", employeeRating.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

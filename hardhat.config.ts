@@ -39,6 +39,13 @@ if (!process.env.INFURA_API_KEY) {
   infuraApiKey = process.env.INFURA_API_KEY;
 }
 
+let ropstenPrivateKey: string;
+if(!process.env.ROPSTEN_DEPLOYER_PRIVATE_KEY){
+  throw new Error("Please set your ROPSTEN_DEPLOYER_PRIVATE_KEY for deployemnets in a .env file");
+} else {
+  ropstenPrivateKey = process.env.ROPSTEN_DEPLOYER_PRIVATE_KEY;
+} 
+
 function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
   const url: string = "https://" + network + ".infura.io/v3/" + infuraApiKey;
   return {
@@ -71,7 +78,10 @@ const config: HardhatUserConfig = {
     goerli: createTestnetConfig("goerli"),
     kovan: createTestnetConfig("kovan"),
     rinkeby: createTestnetConfig("rinkeby"),
-    ropsten: createTestnetConfig("ropsten"),
+    ropsten: {
+      url: "https://ropsten.infura.io/v3/" + infuraApiKey,
+      accounts: [ ropstenPrivateKey ]
+    },
   },
   paths: {
     artifacts: "./artifacts",

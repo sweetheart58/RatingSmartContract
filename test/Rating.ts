@@ -32,9 +32,6 @@ describe("Unit tests", function () {
       await expect(
       hardhatToken.rate(addr1.address, 0)
       ).to.be.revertedWith('Rating must be between 1 and 5');
-      await expect(
-        hardhatToken.rate(addr1.address, 6)
-        ).to.be.revertedWith('Rating must be between 1 and 5');
     });
 
     it("Should reject a 6 rating", async () => {
