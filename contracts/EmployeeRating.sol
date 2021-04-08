@@ -9,17 +9,21 @@ contract EmployeeRating {
         mapping (address => uint) rating;
     }
 
-    event VoteCast (address indexed from, address indexed to, uint rating );
+    event RatingCast (address indexed from, address indexed to, uint rating );
 
     mapping (address => Employee) employeesMapping;
 
-    function getEmployeeRating (address toAddress, address fromAddress) public view returns (uint){
+    function getRating (address fromAddress, address toAddress) public view returns (uint){
         return  employeesMapping[toAddress].rating[fromAddress];
     }
 
     function rate(address employee, uint rating) public {
         address caller = msg.sender;
+
+        require(rating > 1 && rating <= 5, 'Rating must be between 1 and 5');
+
         employeesMapping[employee].rating[caller] = rating;
-        emit VoteCast (caller, employee, rating);
+        
+        emit RatingCast (caller, employee, rating);
     }
 }

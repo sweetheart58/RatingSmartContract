@@ -1,31 +1,47 @@
-import hre from "hardhat";
-import { Artifact } from "hardhat/types";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+import { ethers } from "hardhat";
+import { Contract } from "@ethersproject/contracts";
+const { assert, expect } = require("chai");
 
-import { EmployeeRating } from "../typechain/EmployeeRating";
-import { Signers } from "../types";
-
-const { deployContract } = hre.waffle;
 
 describe("Unit tests", function () {
-  before(async function () {
-    this.signers = {} as Signers;
-
-    const signers: SignerWithAddress[] = await hre.ethers.getSigners();
-    this.signers.admin = signers[0];
-    this.alice = signers[1];
-    this.bob = signers[2];
-  });
-
-  describe("Greeter", () => {
-    beforeEach(async () => {
-      const contractArtifact: Artifact = await hre.artifacts.readArtifact("EmployeeRating");
-      this.deployedContract = <EmployeeRating>await deployContract(this.signers.admin, contractArtifact, [5]);
+  describe("Rating an employee", () => {
+    let hardhatToken: Contract; 
+    before( async () => {
+      const EmployeeRating = await ethers.getContractFactory("EmployeeRating");
+      hardhatToken = await EmployeeRating.deploy();
+    });
+    
+    it("Should have inital rating of 0", async () => {
+      const [owner, addr1] = await ethers.getSigners();
+      const ratings = [];
+      ratings.push(await hardhatToken.getRating(owner.address, owner.address));
+      ratings.push(await hardhatToken.getRating(owner.address, addr1.address));
+      assert.equal(ratings[0], 0);
+      assert.equal(ratings[1], 0);
     });
 
-    it("should return the rating after casting rating", async () => {
-        await this.deployedContract.connect(this.signers.alice).rate(this.signers.bob.address, 4);
-        expect(await this.deployedContract.connect(this.signers.admin).getEmployeeRating(this.alice.address, this.bob.address)).to.equal(4);
+    it("Should have updated rating after casting Rating", async () => {
+      const [owner, addr1] = await ethers.getSigners();
+      await hardhatToken.rate(addr1.address, 5)
+      const aliceRating = await hardhatToken.getRating(owner.address, addr1.address);
+      assert.equal(aliceRating, 5);
+    });
+
+    it("Should reject a 0 rating", async () => {
+      const [addr1] = await ethers.getSigners();
+      await expect(
+      hardhatToken.rate(addr1.address, 0)
+      ).to.be.revertedWith('Rating must be between 1 and 5');
+      await expect(
+        hardhatToken.rate(addr1.address, 6)
+        ).to.be.revertedWith('Rating must be between 1 and 5');
+    });
+
+    it("Should reject a 6 rating", async () => {
+      const [addr1] = await ethers.getSigners();
+      await expect(
+        hardhatToken.rate(addr1.address, 6)
+        ).to.be.revertedWith('Rating must be between 1 and 5');
     });
   });
 });
