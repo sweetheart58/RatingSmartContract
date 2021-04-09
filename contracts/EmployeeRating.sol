@@ -4,6 +4,9 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 contract EmployeeRating {
+    uint public constant MAX_RATING = 5;
+    uint public constant MIN_RATING = 1;
+
     struct Employee{
         string name;
         mapping (address => uint) rating;
@@ -11,19 +14,17 @@ contract EmployeeRating {
 
     event RatingCast (address indexed from, address indexed to, uint rating );
 
-    mapping (address => Employee) employeesMapping;
+    mapping (address => Employee) employees;
 
     function getRating (address fromAddress, address toAddress) public view returns (uint){
-        return  employeesMapping[toAddress].rating[fromAddress];
+        return  employees[toAddress].rating[fromAddress];
     }
 
-    function rate(address employee, uint rating) public {
-        address caller = msg.sender;
+    function rate(address employee, uint rating) external {
+        require(rating >= MIN_RATING && rating <= MAX_RATING, 'Rating must be between 1 and 5');
 
-        require(rating > 1 && rating <= 5, 'Rating must be between 1 and 5');
-
-        employeesMapping[employee].rating[caller] = rating;
+        employees[employee].rating[msg.sender] = rating;
         
-        emit RatingCast (caller, employee, rating);
+        emit RatingCast (msg.sender, employee, rating);
     }
 }
