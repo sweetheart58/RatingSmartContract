@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 contract EmployeeRating {
-    // TODO: Add safe mathf
     uint public constant MAX_RATING = 5;
     uint public constant MIN_RATING = 1;
 
@@ -21,8 +20,11 @@ contract EmployeeRating {
 
 
     function getRating (address fromAddress, address toAddress) public view returns (uint){
-        // TODO: Return the average rating
-        return  employees[toAddress].rating[fromAddress][0];
+        uint totalRating;
+        for(uint i; i < skillCount; i++){
+            totalRating += employees[toAddress].rating[fromAddress][i];
+        }
+        return  totalRating/skillCount;
     }
 
     function rate(address employee, uint[] memory ratings) external {

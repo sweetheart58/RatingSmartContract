@@ -22,9 +22,9 @@ describe("Unit tests", function () {
 
     it("Should have updated rating after casting Rating", async () => {
       const [owner, addr1] = await ethers.getSigners();
-      await hardhatToken.rate(addr1.address, [5, 5])
+      await hardhatToken.rate(addr1.address, [1, 5])
       const aliceRating = await hardhatToken.getRating(owner.address, addr1.address);
-      assert.equal(aliceRating, 5);
+      assert.equal(aliceRating, 3);
     });
 
     it("Should reject a 0 rating", async () => {
