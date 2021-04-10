@@ -40,7 +40,7 @@ contract EmployeeRating {
         for(uint256 i; i < ratings.length; i++){
             require(ratings[i] >= MIN_RATING && ratings[i] <= MAX_RATING, 'Rating must be between 1 and 5');
             employees[employee].rating[msg.sender][i] = ratings[i];
-            totalRating = totalRating + ratings[i];
+            totalRating +=  ratings[i];
         }
         
         emit RatingCast (msg.sender, employee, totalRating/ratings.length);
