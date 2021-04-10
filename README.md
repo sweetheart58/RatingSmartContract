@@ -1,6 +1,9 @@
-# Solidity Template
+# Solidity - Employee Rating Smartcontract
 
-My favourite setup for writing Solidity smart contracts.
+Employees can rate each other in various skills using this SmartContract. 
+
+Future Plans:
+- Adding Govvernance to add more skills
 
 - [Hardhat](https://github.com/nomiclabs/hardhat): compile and run the smart contracts on a local development network
 - [TypeChain](https://github.com/ethereum-ts/TypeChain): generate TypeScript types for smart contracts
