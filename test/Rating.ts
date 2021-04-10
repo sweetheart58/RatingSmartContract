@@ -3,7 +3,7 @@ import { Contract } from "@ethersproject/contracts";
 const { assert, expect } = require("chai");
 
 
-describe("Unit tests", function () {
+describe("Rating Tests", function () {
   describe("Rating an employee", () => {
     let ratingCountract: Contract; 
     before( async () => {
@@ -14,17 +14,25 @@ describe("Unit tests", function () {
     it("Should have inital rating of 0", async () => {
       const [owner, addr1] = await ethers.getSigners();
       const ratings = [];
-      ratings.push(await ratingCountract.getRating(owner.address, owner.address));
-      ratings.push(await ratingCountract.getRating(owner.address, addr1.address));
+      ratings.push(await ratingCountract.getAverageRating(owner.address, owner.address));
+      ratings.push(await ratingCountract.getAverageRating(owner.address, addr1.address));
       assert.equal(ratings[0], 0);
       assert.equal(ratings[1], 0);
     });
 
-    it("Should have updated rating after casting Rating", async () => {
+    it("Should have updated and returned average rating", async () => {
       const [owner, addr1] = await ethers.getSigners();
       await ratingCountract.rate(addr1.address, [1, 5])
-      const aliceRating = await ratingCountract.getRating(owner.address, addr1.address);
+      const aliceRating = await ratingCountract.getAverageRating(owner.address, addr1.address);
       assert.equal(aliceRating, 3);
+    });
+
+    it("Should have updated and returened all ratings", async () => {
+      const [owner, addr1] = await ethers.getSigners();
+      await ratingCountract.rate(addr1.address, [1, 5])
+      const aliceRatings = await ratingCountract.getRatings(owner.address, addr1.address);
+      //TODO: Improve this test
+      assert(Array.isArray(aliceRatings));
     });
 
     it("Should reject a 0 rating", async () => {
