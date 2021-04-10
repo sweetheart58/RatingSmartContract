@@ -22,7 +22,7 @@ describe("Unit tests", function () {
 
     it("Should have updated rating after casting Rating", async () => {
       const [owner, addr1] = await ethers.getSigners();
-      await hardhatToken.rate(addr1.address, 5)
+      await hardhatToken.rate(addr1.address, [5, 5])
       const aliceRating = await hardhatToken.getRating(owner.address, addr1.address);
       assert.equal(aliceRating, 5);
     });
@@ -30,14 +30,14 @@ describe("Unit tests", function () {
     it("Should reject a 0 rating", async () => {
       const [addr1] = await ethers.getSigners();
       await expect(
-      hardhatToken.rate(addr1.address, 0)
+      hardhatToken.rate(addr1.address, [0,0])
       ).to.be.revertedWith('Rating must be between 1 and 5');
     });
 
     it("Should reject a 6 rating", async () => {
       const [addr1] = await ethers.getSigners();
       await expect(
-        hardhatToken.rate(addr1.address, 6)
+        hardhatToken.rate(addr1.address, [6,6])
         ).to.be.revertedWith('Rating must be between 1 and 5');
     });
   });
