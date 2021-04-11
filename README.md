@@ -1,5 +1,7 @@
 # Solidity - Employee Rating Smartcontract
 
+[![Coverage Status](https://coveralls.io/repos/github/reubenr0d/EmployeeRatingSmartContract/badge.svg?branch=master)](https://coveralls.io/github/reubenr0d/EmployeeRatingSmartContract?branch=master)
+
 Employees can rate each other in various skills using this SmartContract. 
 
 Future Plans:
