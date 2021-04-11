@@ -15,3 +15,7 @@ jobs:
           MNEMONIC: REU
           INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
           ROPSTEN_DEPLOYER_PRIVATE_KEY: ${{ secrets.ROPSTEN_DEPLOYER_PRIVATE_KEY }}
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
