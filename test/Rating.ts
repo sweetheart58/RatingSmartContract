@@ -46,31 +46,32 @@ describe("Rating Tests", function () {
 
     it("Should have updated and returned average rating", async () => {
       const [owner, addr1] = await ethers.getSigners();
-      await ratingCountract.rate(addr1.address, [1, 5])
+      await ratingCountract.rate(addr1.address, [1, 3241])
       const aliceRating = await ratingCountract.getAverageRating(owner.address, addr1.address);
-      assert.equal(aliceRating, 3);
+      assert.equal(aliceRating, 1621);
     });
 
     it("Should have updated and returened all ratings", async () => {
       const [owner, addr1] = await ethers.getSigners();
-      await ratingCountract.rate(addr1.address, [1, 5])
+      await ratingCountract.rate(addr1.address, [1, 3241])
       const aliceRatings = await ratingCountract.getRatings(owner.address, addr1.address);
       assert.equal(aliceRatings[0], 1);
-      assert.equal(aliceRatings[1], 5);
+      assert.equal(aliceRatings[1], 3241);
     });
 
     it("Should reject a 0 rating", async () => {
       const [addr1] = await ethers.getSigners();
       await expect(
       ratingCountract.rate(addr1.address, [0,0])
-      ).to.be.revertedWith('Rating must be between 1 and 5');
+      ).to.be.revertedWith('Rating must be within limits');
     });
 
     it("Should reject a 6 rating", async () => {
       const [addr1] = await ethers.getSigners();
       await expect(
-        ratingCountract.rate(addr1.address, [6,6])
-        ).to.be.revertedWith('Rating must be between 1 and 5');
+        ratingCountract.rate(addr1.address, [BigInt(6000000000000000000),
+          BigInt(6000000000000000000)])
+        ).to.be.revertedWith('Rating must be within limits');
     });
   });
 });

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 contract EmployeeRating {
-    uint256 public constant MAX_RATING = 5;
+    uint256 public constant MAX_RATING = 5e18;
     uint256 public constant MIN_RATING = 1;
 
     struct Employee{
@@ -28,7 +28,7 @@ contract EmployeeRating {
         
         uint256 totalRating;
         for(uint256 i; i < ratings.length; i++){
-            require(ratings[i] >= MIN_RATING && ratings[i] <= MAX_RATING, 'Rating must be between 1 and 5');
+            require(ratings[i] >= MIN_RATING && ratings[i] <= MAX_RATING, 'Rating must be within limits');
             employees[employee].rating[msg.sender].push(ratings[i]);
             totalRating +=  ratings[i];
         }
