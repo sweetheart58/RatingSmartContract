@@ -1,5 +1,5 @@
 name: CI-Test
-on: [push]
+on: [push, pull-request]
 
 jobs:
   test:
@@ -16,6 +16,10 @@ jobs:
           INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
           ROPSTEN_DEPLOYER_PRIVATE_KEY: ${{ secrets.ROPSTEN_DEPLOYER_PRIVATE_KEY }}
       - run: yarn coverage
+        env:
+          MNEMONIC: REU
+          INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+          ROPSTEN_DEPLOYER_PRIVATE_KEY: ${{ secrets.ROPSTEN_DEPLOYER_PRIVATE_KEY }}
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v1.1.2
         with:
