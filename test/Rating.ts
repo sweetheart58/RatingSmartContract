@@ -4,11 +4,35 @@ const { assert, expect } = require("chai");
 
 
 describe("Rating Tests", function () {
+  let ratingCountract: Contract; 
+  before( async () => {
+    const EmployeeRating = await ethers.getContractFactory("EmployeeRating");
+    ratingCountract = await EmployeeRating.deploy();
+  });
+
+  describe("Checking and adding skills", () => {
+    it("Should throw error if no skill is added", async () => {
+      const [addr1] = await ethers.getSigners();
+      await expect(
+      ratingCountract.rate(addr1.address, [1,5])
+      ).to.be.revertedWith('Add skills before rating');
+    })
+
+    it("Should add a new skill", async () => {
+      await ratingCountract.addNewSkill('Skill 1');
+      const newSkill = await ratingCountract.skillNames(0);
+      assert.equal(newSkill, 'Skill 1');
+    });
+
+    it("Should return skillCount Integer", async () => {
+      const skillCount = await ratingCountract.getSkillCount();
+      assert.equal(skillCount, 1);
+    });
+  });
+
   describe("Rating an employee", () => {
-    let ratingCountract: Contract; 
     before( async () => {
-      const EmployeeRating = await ethers.getContractFactory("EmployeeRating");
-      ratingCountract = await EmployeeRating.deploy();
+      await ratingCountract.addNewSkill('Skill 2');
     });
     
     it("Should have inital rating of 0", async () => {
@@ -47,17 +71,6 @@ describe("Rating Tests", function () {
       await expect(
         ratingCountract.rate(addr1.address, [6,6])
         ).to.be.revertedWith('Rating must be between 1 and 5');
-    });
-
-    it("Should return skillCount Integer", async () => {
-      const skillCount = await ratingCountract.getSkillCount();
-      assert.equal(skillCount, 2);
-    });
-
-    it("Should add a new skill", async () => {
-      await ratingCountract.addNewSkill('Skill 3');
-      const newSkill = await ratingCountract.skillNames(2);
-      assert.equal(newSkill, 'Skill 3');
     });
   });
 });
