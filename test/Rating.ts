@@ -53,5 +53,11 @@ describe("Rating Tests", function () {
       const skillCount = await ratingCountract.getSkillCount();
       assert.equal(skillCount, 2);
     });
+
+    it("Should add a new skill", async () => {
+      await ratingCountract.addNewSkill('Skill 3');
+      const newSkill = await ratingCountract.skillNames(2);
+      assert.equal(newSkill, 'Skill 3');
+    });
   });
 });

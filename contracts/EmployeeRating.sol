@@ -21,20 +21,6 @@ contract EmployeeRating {
 
     event RatingCast (address indexed from, address indexed to, uint256 rating );
 
-
-    function getAverageRating (address fromAddress, address toAddress) public view returns (uint256){
-        uint256 totalRating;
-        for(uint256 i; i < employees[toAddress].rating[fromAddress].length; i++){
-            totalRating += employees[toAddress].rating[fromAddress][i];
-        }
-        return  totalRating/skillNames.length;
-    }
-
-    function getRatings (address fromAddress, address toAddress) public view returns (uint256[] memory){
-        return employees[toAddress].rating[fromAddress];
-    }
-
-
     function rate(address employee, uint256[] memory ratings) external {
         require(ratings.length == skillNames.length, 'Ratings array should have count equal to skillCount');
         
@@ -48,7 +34,23 @@ contract EmployeeRating {
         emit RatingCast (msg.sender, employee, totalRating/ratings.length);
     }
 
+    function getRatings (address fromAddress, address toAddress) public view returns (uint256[] memory){
+        return employees[toAddress].rating[fromAddress];
+    }
+
+    function getAverageRating (address fromAddress, address toAddress) public view returns (uint256){
+        uint256 totalRating;
+        for(uint256 i; i < employees[toAddress].rating[fromAddress].length; i++){
+            totalRating += employees[toAddress].rating[fromAddress][i];
+        }
+        return  totalRating/skillNames.length;
+    }
+
     function getSkillCount() public view returns (uint256){
         return skillNames.length;
-    } 
+    }
+
+    function addNewSkill(string memory skillName) external {
+        skillNames.push(skillName);
+    }
 }
