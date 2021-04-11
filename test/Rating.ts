@@ -59,6 +59,14 @@ describe("Rating Tests", function () {
       assert.equal(aliceRatings[1], 3241);
     });
 
+    it("Should reject a rating with wrong number of parameters", async () => {
+      const [addr1] = await ethers.getSigners();
+      await expect(
+      ratingCountract.rate(addr1.address, [1,123, 456])
+      ).to.be.revertedWith('Ratings array should have count equal to skillCount');
+    });
+
+
     it("Should reject a 0 rating", async () => {
       const [addr1] = await ethers.getSigners();
       await expect(
