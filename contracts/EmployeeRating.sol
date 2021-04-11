@@ -21,7 +21,7 @@ contract EmployeeRating {
     }
 
     event RatingCast (address indexed from, address indexed to, uint256 rating );
-    event NewSillAdded (address indexed from, string name);
+    event NewSkillAdded (address indexed from, string indexed name);
 
     function rate(address employee, uint256[] memory ratings) external skillsExists{
         require(ratings.length == skillNames.length, 'Ratings array should have count equal to skillCount');
@@ -54,6 +54,6 @@ contract EmployeeRating {
 
     function addNewSkill(string memory skillName) external {
         skillNames.push(skillName);
-        emit NewSillAdded (msg.sender, skillName);
+        emit NewSkillAdded (msg.sender, skillName);
     }
 }
