@@ -31,8 +31,8 @@ describe("Rating Tests", function () {
       const [owner, addr1] = await ethers.getSigners();
       await ratingCountract.rate(addr1.address, [1, 5])
       const aliceRatings = await ratingCountract.getRatings(owner.address, addr1.address);
-      //TODO: Improve this test
-      assert(Array.isArray(aliceRatings));
+      assert.equal(aliceRatings[0], 1);
+      assert.equal(aliceRatings[1], 5);
     });
 
     it("Should reject a 0 rating", async () => {

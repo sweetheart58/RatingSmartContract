@@ -10,7 +10,7 @@ contract EmployeeRating {
     struct Employee{
         string name;
     // TODO: Try cahnging internal maping to array and use .length
-        mapping (address => mapping(uint256 => uint256)) rating;
+        mapping (address => uint256[]) rating;
     }
     mapping (address => Employee) employees;
     mapping (uint256 => string) skillNames;
@@ -27,18 +27,14 @@ contract EmployeeRating {
 
     function getAverageRating (address fromAddress, address toAddress) public view returns (uint256){
         uint256 totalRating;
-        for(uint256 i; i < skillCount; i++){
+        for(uint256 i; i < employees[toAddress].rating[fromAddress].length; i++){
             totalRating += employees[toAddress].rating[fromAddress][i];
         }
         return  totalRating/skillCount;
     }
 
     function getRatings (address fromAddress, address toAddress) public view returns (uint256[] memory){
-        uint256[] memory ratings = new uint256[](skillCount);
-        for(uint256 i = 0; i < skillCount; i++){
-            ratings[i] = employees[toAddress].rating[fromAddress][i];
-        }
-        return ratings;
+        return employees[toAddress].rating[fromAddress];
     }
 
 
@@ -48,14 +44,14 @@ contract EmployeeRating {
         uint256 totalRating;
         for(uint256 i; i < ratings.length; i++){
             require(ratings[i] >= MIN_RATING && ratings[i] <= MAX_RATING, 'Rating must be between 1 and 5');
-            employees[employee].rating[msg.sender][i] = ratings[i];
+            employees[employee].rating[msg.sender].push(ratings[i]);
             totalRating +=  ratings[i];
         }
         
         emit RatingCast (msg.sender, employee, totalRating/ratings.length);
     }
 
-    function getSkillName(uint256 skillIndex) external view returns (string memory){
+    function getSkillNames(uint256 skillIndex) external view returns (string memory){
         return skillNames[skillIndex];
     }
 
