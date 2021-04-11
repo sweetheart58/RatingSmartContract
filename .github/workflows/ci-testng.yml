@@ -11,3 +11,7 @@ jobs:
           node-version: 14
       - run: yarn
       - run: yarn test
+      env:
+        MNEMONIC: REU
+        INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+        ROPSTEN_DEPLOYER_PRIVATE_KEY: ${{ secrets.ROPSTEN_DEPLOYER_PRIVATE_KEY }}
