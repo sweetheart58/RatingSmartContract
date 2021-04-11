@@ -49,11 +49,6 @@ describe("Rating Tests", function () {
         ).to.be.revertedWith('Rating must be between 1 and 5');
     });
 
-    it("Should return first skill name string", async () => {
-      const firstSkillName = await ratingCountract.getSkillName(0);
-      assert.equal(firstSkillName, 'Test Skill 1');
-    });
-
     it("Should return skillCount Integer", async () => {
       const skillCount = await ratingCountract.getSkillCount();
       assert.equal(skillCount, 2);

@@ -9,17 +9,14 @@ contract EmployeeRating {
 
     struct Employee{
         string name;
-    // TODO: Try cahnging internal maping to array and use .length
         mapping (address => uint256[]) rating;
     }
     mapping (address => Employee) employees;
-    mapping (uint256 => string) skillNames;
+    string[] public skillNames;
 
-    uint256 public skillCount;
     constructor () {
-        skillNames[0] = "Test Skill 1";
-        skillNames[1] = "Test Skill 2";
-        skillCount = 2;
+        skillNames.push("Test Skill 1");
+        skillNames.push("Test Skill 2");
     }
 
     event RatingCast (address indexed from, address indexed to, uint256 rating );
@@ -30,7 +27,7 @@ contract EmployeeRating {
         for(uint256 i; i < employees[toAddress].rating[fromAddress].length; i++){
             totalRating += employees[toAddress].rating[fromAddress][i];
         }
-        return  totalRating/skillCount;
+        return  totalRating/skillNames.length;
     }
 
     function getRatings (address fromAddress, address toAddress) public view returns (uint256[] memory){
@@ -39,7 +36,7 @@ contract EmployeeRating {
 
 
     function rate(address employee, uint256[] memory ratings) external {
-        require(ratings.length == skillCount, 'Ratings array should have count equal to skillCount');
+        require(ratings.length == skillNames.length, 'Ratings array should have count equal to skillCount');
         
         uint256 totalRating;
         for(uint256 i; i < ratings.length; i++){
@@ -51,11 +48,7 @@ contract EmployeeRating {
         emit RatingCast (msg.sender, employee, totalRating/ratings.length);
     }
 
-    function getSkillNames(uint256 skillIndex) external view returns (string memory){
-        return skillNames[skillIndex];
-    }
-
     function getSkillCount() public view returns (uint256){
-        return skillCount;
+        return skillNames.length;
     } 
 }
