@@ -5,7 +5,9 @@
 Employees can rate each other in various skills using this SmartContract. 
 
 Future Plans:
-- Adding Govvernance to add more skills
+- Adding support for Organizations 
+- Adding permissioning, so only authorized users can rate
+- Adding Governance to add more skills
 
 Technologies Used:
 - [Hardhat](https://github.com/nomiclabs/hardhat): compile and run the smart contracts on a local development network
